@@ -4,6 +4,7 @@ from typing import List, Optional
 
 app = FastAPI()
 
+#Spot클래스 설정
 class Spot(BaseModel):
     id: Optional[int] = None
     name: Optional[str] = None
@@ -17,18 +18,24 @@ class Spot(BaseModel):
     like_ratio: Optional[float] = None
     img_url: Optional[str] = None
 
+#데이터 저장소
 db: List[Spot] = []
 db_cafes: List[Spot] = []
 db_pubs: List[Spot] = []
 db_restaurants: List[Spot] = []
 
 
-
+#
 def load_data_from_json(data: List[Spot]):
     global db
     global db_cafes
     global db_pubs
     global db_restaurants
+    db: List[Spot] = []
+    db_cafes: List[Spot] = []
+    db_pubs: List[Spot] = []
+    db_restaurants: List[Spot] = []
+
     data = sorted(data, key=lambda x: x.like_ratio, reverse=True)
     max_id = max((spot.id for spot in db if spot.id is not None), default=0)
     for item in data:
