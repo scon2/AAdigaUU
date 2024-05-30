@@ -20,7 +20,7 @@ class Spot(BaseModel):
     likes: Optional[int] = None
     like_ratio: Optional[float] = None
     img_url: Optional[str] = None
-    isLike: Optional[bool] = False
+    isLike: Optional[bool] =  False
 
 #데이터 저장소
 db: List[Spot] = []
