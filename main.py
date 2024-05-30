@@ -2,6 +2,9 @@ from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
 from typing import List, Optional
 
+#멕스 아이디
+# max_id = max((spot.id for spot in db if spot.id is not None), default=0)
+
 app = FastAPI()
 
 #Spot클래스 설정
@@ -25,22 +28,22 @@ db_pubs: List[Spot] = []
 db_restaurants: List[Spot] = []
 
 
-#
-def load_data_from_json(data: List[Spot]):
+#처음 데이터 넣을 때
+def load_data_first_from_json(data: List[Spot]):
     global db
     global db_cafes
     global db_pubs
     global db_restaurants
-    db: List[Spot] = []
-    db_cafes: List[Spot] = []
-    db_pubs: List[Spot] = []
-    db_restaurants: List[Spot] = []
+    db = []
+    db_cafes = []
+    db_pubs = []
+    db_restaurants = []
 
     data = sorted(data, key=lambda x: x.like_ratio, reverse=True)
-    max_id = max((spot.id for spot in db if spot.id is not None), default=0)
+    id = 0
     for item in data:
-        max_id += 1
-        item.id = max_id
+        id += 1
+        item.id = id
         db.append(item)
     for i in db:
         if i.category == 'cafes':
@@ -50,15 +53,42 @@ def load_data_from_json(data: List[Spot]):
         elif i.category == 'pubs':
             db_pubs.append(i)
 
+
+#두번째 부터 함수 넣을 때
+def load_data_update_from_json(updata: List[Spot]):
+    global db
+    global db_cafes
+    global db_pubs
+    global db_restaurants
+    updata = sorted(updata, key=lambda x: x.like_ratio, reverse=True)
+    max_id = max((spot.id for spot in db if spot.id is not None), default=0)
+    for item in updata:
+        max_id += 1
+        item.id = max_id
+        db.append(item)
+    db = sorted(db, key=lambda x: x.like_ratio, reverse=True)
+
+
+#메인 화면
 @app.get("/")
 async def message():
-    return '어디가유 데이터 서버입니다. 확인용 3'
+    return ('어디가유 데이터 서버입니다.5')
 
-@app.post("/load-data/")
-def load_data(data: List[Spot]):
+#첫 데이터 넣을 때
+@app.post("/first_data/")
+def load_data_first(data: List[Spot]):
     try:
-        load_data_from_json(data)
-        return {"message": "Data loaded successfully"}
+        load_data_first_from_json(data)
+        return {"message": "First data loaded successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+#업데이트 데이터 넣을 때
+@app.post("/update_data/")
+def load_data_update(data: List[Spot]):
+    try:
+        load_data_update_from_json(data)
+        return {"message": "Update data loaded successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

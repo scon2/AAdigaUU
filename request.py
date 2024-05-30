@@ -1,7 +1,7 @@
 import requests, json
 
 # 요청을 보낼 URL
-url = "https://port-0-aadigauu-ss7z32llwfxpe6k.sel5.cloudtype.app/load-data/"
+url = "http://127.0.0.1:8000/update_data/"
 file_path = r"C:\Users\ChoJunseop\Downloads\processed_data (1).json"
 
 #json 파일 열기
