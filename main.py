@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException, Body, Form
 from pydantic import BaseModel
 from typing import List, Optional
 
@@ -94,11 +94,12 @@ def load_data_update(data: List[Spot]):
         raise HTTPException(status_code=500, detail=str(e))
 
 #찜 하기 기능
-@app.post("/zzim/{spot_id}")
-def zzimhagi(spot_id: int, isLike: bool):
+@app.put("/zzim/{spot_id}")
+def zzimhagi(spot_id: int, isLike: bool = Form(...)):
     for spot in db:
         if spot_id == spot.id:
-            spot.isLike = True if isLike else False
+            spot.isLike = isLike
+            return {"message": "zzimhagi successfully"}
     raise HTTPException(status_code=404, detail="Spot not found")
 
 @app.post("/spots/")
