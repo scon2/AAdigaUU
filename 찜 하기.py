@@ -1,10 +1,10 @@
 import requests, json
 
 # 요청을 보낼 URL
-url = "http://127.0.0.1:8000/zzim/20"
+url = "https://port-0-aadigauu-1272llwnq4inr.sel5.cloudtype.app/zzim/20"
 
 
-data = {"isLike": "False"}
+data = {"isLiked": "True"}
 
 response = requests.put(url, data = data)
 
