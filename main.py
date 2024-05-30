@@ -20,6 +20,7 @@ class Spot(BaseModel):
     likes: Optional[int] = None
     like_ratio: Optional[float] = None
     img_url: Optional[str] = None
+    isLike: Optional[bool] = False
 
 #데이터 저장소
 db: List[Spot] = []
@@ -92,6 +93,14 @@ def load_data_update(data: List[Spot]):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+#찜 하기 기능
+@app.post("/zzim/{spot_id}")
+def zzimhagi(spot_id: int, isLike: bool):
+    for spot in db:
+        if spot_id == spot.id:
+            spot.isLike = True if isLike else False
+    raise HTTPException(status_code=404, detail="Spot not found")
+
 @app.post("/spots/")
 def create_spot(spot: Spot):
     if db:
@@ -118,6 +127,15 @@ def get_restaurants():
 @app.get("/spots/pubs/")
 def get_pubs():
     return db_pubs
+
+@app.get("/spots/zzim/")
+def get_zzim():
+    zzimlist = []
+    for item in db:
+        if item.isLike == True:
+            zzimlist.append(item)
+    return zzimlist
+
 
 @app.get("/spots/{spot_id}")
 def read_spot(spot_id: int):
