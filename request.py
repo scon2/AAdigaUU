@@ -1,8 +1,8 @@
 import requests, json
 
 # 요청을 보낼 URL
-url = "http://127.0.0.1:8000/first_data"
-file_path = r"C:\Users\ChoJunseop\Downloads\processed_data (1).json"
+url = "https://port-0-aadigauu-1272llwnq4inr.sel5.cloudtype.app/first_data/"
+file_path = r"/Users/rnoro/Documents/GitHub/AAdigaUU/processed_data.json"
 
 #json 파일 열기
 with open(file_path, 'r', encoding="UTF-8") as file:

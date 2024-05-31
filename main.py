@@ -20,7 +20,7 @@ class Spot(BaseModel):
     likes: Optional[int] = None
     like_ratio: Optional[float] = None
     img_url: Optional[str] = None
-    isLike: Optional[bool] = False
+    isLiked: Optional[bool] =  False
 
 #데이터 저장소
 db: List[Spot] = []
@@ -95,10 +95,10 @@ def load_data_update(data: List[Spot]):
 
 #찜 하기 기능
 @app.put("/zzim/{spot_id}")
-def zzimhagi(spot_id: int, isLike: bool = Form(...)):
+def zzimhagi(spot_id: int, isLiked: bool = Form(...)):
     for spot in db:
         if spot_id == spot.id:
-            spot.isLike = isLike
+            spot.isLiked = isLiked
             return {"message": "zzimhagi successfully"}
     raise HTTPException(status_code=404, detail="Spot not found")
 
@@ -133,7 +133,7 @@ def get_pubs():
 def get_zzim():
     zzimlist = []
     for item in db:
-        if item.isLike == True:
+        if item.isLiked == True:
             zzimlist.append(item)
     return zzimlist
 
